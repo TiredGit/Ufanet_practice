@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'images/logo-ufanet.png' %}" sizes="32x32" type="image/png">
+    <title>Скидки для абонентов Уфанет</title>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="{% static 'images/logo-ufanet.png' %}" alt="Логотип" class="logo">
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="title">Скидки от партнеров:</div>
+            <div class="city">Уфа</div>
+        </div>
+        
+        <div class="categories-grid">
+            {% for category in categories %}
+                <div class="category">
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" alt="Категория" class="category-icon">
+                    {% else %}
+                    <img src="{% static 'images/logo-ufanet.png' %}" alt="Категория" class="category-icon">
+                    {% endif %}
+                    <div class="category-name">{{category.name}}</div>
+                    <div class="offer-count">{{category.cards_number}} предложений</div>
+                </div>
+            {% endfor %}
+        </div>
+    
+        <div class="header">
+            <div class="title2">Предложения:</div>
+        </div>
+        <div class="discounts-list">
+            {% for discount in discounts %}
+                <div class="discount-item">
+                    {% if discount.image %}
+                    <img src="{{ discount.image.url }}" alt="Предложение" class="discount-icon">
+                    {% else %}
+                    <img src="{% static 'images/logo-ufanet.png' %}" alt="Предложение" class="discount-icon">
+                    {% endif %}
+                    <div class="discount-info">
+                        <div class="discount-name">{{discount.name}}</div>
+                        <div class="discount-description">{{discount.small_name}}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
