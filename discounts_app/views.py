@@ -31,7 +31,6 @@ def categories_view(request):
         except DiscountCard.DoesNotExist:
             pass
 
-    # Добавляем поле city_offer_count вручную каждому category
     for category in categories:
         if selected_city:
             category.city_offer_count = category.discount_cards.filter(cities=selected_city).count()
