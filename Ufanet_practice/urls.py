@@ -23,7 +23,8 @@ from django.conf.urls.static import static
 from discounts_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sales/', views.categories_view, name='categories'),
+    path('', views.categories_view, name='categories'),
+    path('category/<int:category_id>/', views.category_discounts_view, name='category_discounts')
 ]
 
 if settings.DEBUG:

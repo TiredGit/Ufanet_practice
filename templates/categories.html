@@ -16,20 +16,34 @@
     <div class="container">
         <div class="header">
             <div class="title">Скидки от партнеров:</div>
-            <div class="city">Уфа</div>
+            <div class="city-selector">
+                <div class="current-city" onclick="toggleCityDropdown()">
+                    {{ selected_city.name }}
+                </div>
+                <div id="cityDropdown" class="city-dropdown">
+                    {% for city in cities %}
+                        <a href="?city={{ city.id }}" class="city-option">
+                            {{ city.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
         
         <div class="categories-grid">
             {% for category in categories %}
-                <div class="category">
-                    {% if category.image %}
-                    <img src="{{ category.image.url }}" alt="Категория" class="category-icon">
-                    {% else %}
-                    <img src="{% static 'images/logo-ufanet.png' %}" alt="Категория" class="category-icon">
-                    {% endif %}
-                    <div class="category-name">{{category.name}}</div>
-                    <div class="offer-count">{{category.cards_number}} предложений</div>
-                </div>
+                <a href="{% url 'category_discounts' category.id %}" class="category-link">
+                    <div class="category">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="Категория" class="category-icon">
+                        {% else %}
+                        <img src="{% static 'images/logo-ufanet.png' %}" alt="Категория" class="category-icon">
+                        {% endif %}
+                        <div class="category-name">{{category.name}}</div>
+                        <div class="offer-count">{{ category.city_offer_count }} предложений</div>
+
+                    </div>
+                </a>
             {% endfor %}
         </div>
     
@@ -38,19 +52,94 @@
         </div>
         <div class="discounts-list">
             {% for discount in discounts %}
-                <div class="discount-item">
-                    {% if discount.image %}
-                    <img src="{{ discount.image.url }}" alt="Предложение" class="discount-icon">
-                    {% else %}
-                    <img src="{% static 'images/logo-ufanet.png' %}" alt="Предложение" class="discount-icon">
-                    {% endif %}
-                    <div class="discount-info">
-                        <div class="discount-name">{{discount.name}}</div>
-                        <div class="discount-description">{{discount.small_name}}</div>
+                <a href="?selected={{ discount.id }}" style="text-decoration: none" class="discount-link">
+                <div class="discount-item" style="background-color: {{ discount.background_color|default:'#f0f8ff' }};">
+                    <div class="discount-content">
+                        <div class="discount-info">
+                            <div class="discount-name">{{discount.name}}</div>
+                            <div class="discount-description">{{discount.small_name}}</div>
+                            <div class="discount-validity">Действует до: {{ discount.end_date|date:"d.m.Y" }}</div>
+                        </div>
+                        {% if discount.image %}
+                        <img src="{{ discount.image.url }}" alt="Предложение" class="discount-image">
+                        {% else %}
+                        <img src="{% static 'images/logo-ufanet.png' %}" alt="Предложение" class="discount-image">
+                        {% endif %}
+                    </div>
+                    <div class="company-info">
+                        {% if discount.company.company_image %}
+                        <img src="{{ discount.company.company_image.url }}" alt="Логотип компании" class="company-logo">
+                        {% else %}
+                        <img src="{% static 'images/default-company.png' %}" alt="Логотип компании" class="company-logo">
+                        {% endif %}
+                        <div class="company-details">
+                            <div class="company-name">{{discount.company.company_name}}</div>
+                            <div class="company-category">{{ discount.offers_category | default:'Разное' }}</div>
+                        </div>
                     </div>
                 </div>
+                </a>
             {% endfor %}
         </div>
     </div>
+
+    {% if selected_discount %}
+        <div id="discountModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <a href="?" class="modal-close">&times;</a>
+            
+                <img src="{% if selected_discount.image %}{{ selected_discount.image.url }}{% else %}{% static 'images/logo-ufanet.png' %}{% endif %}" 
+                    class="modal-discount-image">
+            
+                <div class="modal-company-info">
+                    <img src="{% if selected_discount.company.company_image %}{{ selected_discount.company.company_image.url }}{% else %}{% static 'images/default-company.png' %}{% endif %}" 
+                        class="modal-company-logo">
+                    <div>{{ selected_discount.company.company_name }}</div>
+                </div>
+            
+                <a href="{{ selected_discount.address|default:'#' }}" class="modal-get-discount">Получить скидку</a>
+            
+                <div class="modal-section-title">Как получить</div>
+                <div class="modal-section-text">{{ selected_discount.how_to_get }}</div>
+            
+                <div class="modal-section-title">Срок действия</div>
+                <div class="modal-section-text">От {{ selected_discount.start_date|date:"d.m.Y" }} до {{ selected_discount.end_date|date:"d.m.Y" }}</div>
+            
+                <div class="modal-section-title">О партнере</div>
+                <div class="modal-section-text">{{ selected_discount.about }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        function closeModal() {
+            document.getElementById('discountModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('discountModal')) {
+                closeModal();
+            }
+        }
+        
+
+        function toggleCityDropdown() {
+            const dropdown = document.getElementById('cityDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Закрытие при клике вне меню
+        window.addEventListener('click', function(e) {
+            const dropdowns = document.querySelectorAll('.city-dropdown');
+            dropdowns.forEach(dropdown => {
+                if (dropdown.classList.contains('show') && !e.target.closest('.city-selector')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+        
+    </script>
+
+
 </body>
 </html>
