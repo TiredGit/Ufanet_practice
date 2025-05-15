@@ -18,19 +18,19 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="search-container">
             <form method="GET" action="">
-                <input type="search" 
-                    name="search" 
+                <input type="search"
+                    name="search"
                     value="{{ search_query }}"
-                    placeholder="Поиск предложений" 
+                    placeholder="Поиск предложений"
                     class="search-input">
                 <input type="hidden" name="city" value="{{ selected_city.id }}">
                 <button type="submit" class="search-button">Найти</button>
             </form>
         </div>
-    
+
         <div class="categories-grid">
             {% for category in categories %}
                 {% if category.city_offer_count > 0 %}

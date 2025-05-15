@@ -1,7 +1,5 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView
-from discounts_app import models
 
 from django.shortcuts import render
 from .models import DiscountCategory, DiscountCard, City
@@ -27,7 +25,7 @@ def categories_view(request):
     search = request.GET.get('search', '')
 
     if selected_city:
-        if search != '':
+        if search:
             discounts = DiscountCard.objects.filter(
                 Q(cities=selected_city) & (Q(name__icontains=search) | Q(small_name__icontains=search)
                                            | Q(company__company_name__icontains=search)))
