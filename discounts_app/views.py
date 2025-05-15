@@ -22,13 +22,13 @@ def categories_view(request):
         except City.DoesNotExist:
             pass
 
-    search = request.GET.get('search', '')
+    search = request.GET.get('search')
 
     if selected_city:
         if search:
             discounts = DiscountCard.objects.filter(
-                Q(cities=selected_city) & (Q(name__icontains=search) | Q(small_name__icontains=search)
-                                           | Q(company__company_name__icontains=search)))
+                Q(cities=selected_city) & (Q(name__icontains=search) | Q(small_name__icontains=search) |
+                Q(company__company_name__icontains=search) | Q(offers_category__icontains=search)))
             categories = DiscountCategory.objects.filter(name__icontains=search)
         else:
             discounts = DiscountCard.objects.filter(cities=selected_city)
