@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 from discounts_app import models
@@ -23,8 +24,16 @@ def categories_view(request):
         except City.DoesNotExist:
             pass
 
+    search = request.GET.get('search', '')
+
     if selected_city:
-        discounts = DiscountCard.objects.filter(cities=selected_city)
+        if search != '':
+            discounts = DiscountCard.objects.filter(
+                Q(cities=selected_city) & (Q(name__icontains=search) | Q(small_name__icontains=search)
+                                           | Q(company__company_name__icontains=search)))
+            categories = DiscountCategory.objects.filter(name__icontains=search)
+        else:
+            discounts = DiscountCard.objects.filter(cities=selected_city)
     else:
         discounts = DiscountCard.objects.all()
 
