@@ -50,7 +50,6 @@ class DiscountCard(models.Model):
     start_date = models.DateField(verbose_name='Стартовая дата')
     end_date = models.DateField(verbose_name='Конечная дата')
     address = models.URLField(verbose_name='Ссылка', max_length=500)
-    bonus_code = models.CharField(verbose_name='Промокод',max_length=100, blank=True, null=True)
     image = models.ImageField(verbose_name='Изображение карточки', upload_to='discounts_images', blank=True, null=True)
     offers_category = models.CharField(verbose_name='Категория предложения', max_length=100, blank=True, null=True)
     categories = models.ManyToManyField(

@@ -1,10 +1,79 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'images/logo-ufanet.png' %}" sizes="32x32" type="image/png">
+    <title>Скидки для абонентов Уфанет</title>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="{% static 'images/logo-ufanet.png' %}" alt="Логотип" class="logo">
+    </div>
+    
+    {% block content %}
+    {% endblock %}
+    
+
+    {% if selected_discount %}
+        <div id="discountModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <a href="?" class="modal-close">&times;</a>
+            
+                <img src="{% if selected_discount.image %}{{ selected_discount.image.url }}{% else %}{% static 'images/logo-ufanet.png' %}{% endif %}" 
+                    class="modal-discount-image">
+            
+                <div class="modal-company-info">
+                    <img src="{% if selected_discount.company.company_image %}{{ selected_discount.company.company_image.url }}{% else %}{% static 'images/default-company.png' %}{% endif %}" 
+                        class="modal-company-logo">
+                    <div>{{ selected_discount.company.company_name }}</div>
+                </div>
+            
+                <a href="{{ selected_discount.address|default:'#' }}" class="modal-get-discount">Получить скидку</a>
+            
+                <div class="modal-section-title">Как получить</div>
+                <div class="modal-section-text">{{ selected_discount.how_to_get }}</div>
+            
+                <div class="modal-section-title">Срок действия</div>
+                <div class="modal-section-text">От {{ selected_discount.start_date|date:"d.m.Y" }} до {{ selected_discount.end_date|date:"d.m.Y" }}</div>
+            
+                <div class="modal-section-title">О партнере</div>
+                <div class="modal-section-text">{{ selected_discount.about }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        function closeModal() {
+            document.getElementById('discountModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('discountModal')) {
+                closeModal();
+            }
+        }
+        
+
+        function toggleCityDropdown() {
+            const dropdown = document.getElementById('cityDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Закрытие при клике вне меню
+        window.addEventListener('click', function(e) {
+            const dropdowns = document.querySelectorAll('.city-dropdown');
+            dropdowns.forEach(dropdown => {
+                if (dropdown.classList.contains('show') && !e.target.closest('.city-selector')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+        
+    </script>
+
 
 </body>
 </html>
