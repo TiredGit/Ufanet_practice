@@ -32,6 +32,7 @@
         
         <div class="categories-grid">
             {% for category in categories %}
+                {% if category.city_offer_count > 0 %}
                 <a href="{% url 'category_discounts' category.id %}" class="category-link">
                     <div class="category">
                         {% if category.image %}
@@ -41,9 +42,9 @@
                         {% endif %}
                         <div class="category-name">{{category.name}}</div>
                         <div class="offer-count">{{ category.city_offer_count }} предложений</div>
-
                     </div>
                 </a>
+                {% endif %}
             {% endfor %}
         </div>
     

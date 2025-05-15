@@ -11,7 +11,10 @@ def categories_view(request):
     cities = City.objects.all()
     selected_city_id = request.session.get('city_id')
 
-    selected_city = City.objects.filter(id=selected_city_id).first() if selected_city_id else City.objects.filter(name='Уфа').first()
+    if selected_city_id:
+        selected_city = City.objects.filter(id=selected_city_id).first()
+    else:
+        selected_city = City.objects.filter(name='Уфа').first()
 
     if 'city' in request.GET:
         try:
@@ -20,7 +23,10 @@ def categories_view(request):
         except City.DoesNotExist:
             pass
 
-    discounts = DiscountCard.objects.filter(cities=selected_city) if selected_city else DiscountCard.objects.all()
+    if selected_city:
+        discounts = DiscountCard.objects.filter(cities=selected_city)
+    else:
+        discounts = DiscountCard.objects.all()
 
     selected_discount_id = request.GET.get('selected')
     selected_discount = None
@@ -50,9 +56,12 @@ def categories_view(request):
 def category_discounts_view(request, category_id):
     category = get_object_or_404(DiscountCategory, id=category_id)
     cities = City.objects.all()
+    selected_city_id = request.session.get('city_id')
 
-    city_id = request.session.get('city_id')
-    selected_city = City.objects.filter(id=city_id).first() if city_id else City.objects.filter(name='Уфа').first()
+    if selected_city_id:
+        selected_city = City.objects.filter(id=selected_city_id).first()
+    else:
+        selected_city = City.objects.filter(name='Уфа').first()
     discounts = DiscountCard.objects.filter(categories=category, cities=selected_city)
 
     selected_discount_id = request.GET.get('selected')
