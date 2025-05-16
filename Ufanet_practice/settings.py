@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-omrp04a4=4cywg+h_!^y95dpi&@xvp_1-d4i*p-8f1c9&^8w!p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -82,7 +82,8 @@ DATABASES = {
         'NAME': 'ufanet',
         'USER': 'ufanet_admin',
         'PASSWORD': 'ufanet_password',
-        'HOST': 'localhost',
+        #'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

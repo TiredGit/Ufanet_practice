@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:17.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ufanet
+      POSTGRES_USER: ufanet_admin
+      POSTGRES_PASSWORD: ufanet_password
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/Ufanet_practice
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DEBUG: 1
+      DB_NAME: ufanet
+      DB_USER: ufanet_admin
+      DB_PASSWORD: ufanet_password
+      DB_HOST: db
+      DB_PORT: 5432
+
+volumes:
+  postgres_data:
