@@ -7,8 +7,9 @@ ENV PYTHONUNBUFFERED 1
 
 RUN pip install --upgrade pip
 RUN pip install uv
-COPY pyproject.toml uv.lock requirements.txt ./
-RUN uv pip install --system -r requirements.txt
+COPY pyproject.toml /
+COPY pyproject.toml uv.lock /
+RUN uv sync
 
 COPY . .
 
