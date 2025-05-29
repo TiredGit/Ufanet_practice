@@ -13,9 +13,6 @@ class DiscountCategory(models.Model):
     def __str__(self):
         return self.name
 
-    def cards_number(self):
-        return self.discount_cards.count()
-
 
 class Company(models.Model):
     company_name = models.CharField(verbose_name='Название компании', max_length=100)

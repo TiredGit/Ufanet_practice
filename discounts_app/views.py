@@ -1,7 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 
-from django.shortcuts import render
 from .models import DiscountCategory, DiscountCard, City
 
 
@@ -14,6 +13,8 @@ def categories_view(request):
         selected_city = City.objects.filter(id=selected_city_id).first()
     else:
         selected_city = City.objects.filter(name='Уфа').first()
+        if not selected_city:
+            selected_city = City.objects.first()
 
     if 'city' in request.GET:
         try:
@@ -69,6 +70,8 @@ def category_discounts_view(request, category_id):
         selected_city = City.objects.filter(id=selected_city_id).first()
     else:
         selected_city = City.objects.filter(name='Уфа').first()
+        if not selected_city:
+            selected_city = City.objects.first()
     discounts = DiscountCard.objects.filter(categories=category, cities=selected_city)
 
     selected_discount_id = request.GET.get('selected')
@@ -84,5 +87,6 @@ def category_discounts_view(request, category_id):
         'category': category,
         'discounts': discounts,
         'selected_discount': selected_discount,
-        'cities': cities
+        'cities': cities,
+        'selected_city': selected_city
     })

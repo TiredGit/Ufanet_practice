@@ -12,10 +12,10 @@ listener:
       discounts_app_company:
         - insert
         - update
-      discounts_app_discount_card:
+      discounts_app_discountcard:
         - insert
         - update
-      discounts_app_discount_category:
+      discounts_app_discountcategory:
         - insert
         - update
   topicsMap:
